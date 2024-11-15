@@ -1,6 +1,7 @@
 import React from "react";
-import { Text, Button } from "react-native";
+import { Text} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Navbar from "../components/Navbar";
 
 export default function HomeScreen(props) {
   const{navigation} = props;
@@ -11,18 +12,8 @@ export default function HomeScreen(props) {
 
   return (
     <SafeAreaView>
+      <Navbar/>
       <Text>Home Screen</Text>
-      <Text>Home Screen</Text>
-      <Text>Home Screen</Text>
-      <Text>Home Screen</Text>
-      <Text>Home Screen</Text>
-      <Text>Home Screen</Text>
-      <Text>Home Screen</Text>
-      <Text>Home Screen</Text>
-      <Text>Home Screen</Text>
-      <Text>Home Screen</Text>
-      <Text>Home Screen</Text>
-      <Button onPress={goToPage} title="Go to Settings" />
     </SafeAreaView>
   );
 }

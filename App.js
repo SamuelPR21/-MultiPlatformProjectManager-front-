@@ -9,7 +9,8 @@ import NavigationDrawer from './src/navigation/NavigationDrawer';
 
 export default function App() {
   return (
-    <NavigationContainer>
+
+    <NavigationContainer style={styles.container}>
       {/*<NavigationStack /> */}
      { /*<NavigationTab/>*/}
       <NavigationDrawer/>
