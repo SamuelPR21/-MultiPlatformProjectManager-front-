@@ -9,56 +9,59 @@ export default function CardComponent(props) {
 
     // Función para mostrar/ocultar el modal
     const toggleModal = () => {
-        setModalVisible(!isModalVisible); 
+        setModalVisible(!isModalVisible);
     };
 
-    // Datos estáticos (quemados) con Lorem Ipsum
-    const item = {
-        title: "Card Title Example",
-        description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia augue eu metus vehicula, vitae fermentum risus cursus.",
-        specificData: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vehicula urna vel orci convallis pretium."
-    };
 
     return (
         <View style={styles.cardContainer}>
+
             {/* Vista previa de la tarjeta */}
             <TouchableOpacity onPress={toggleModal}>
                 <View style={styles.card}>
-                    <Text style={styles.cardTitle}>{item.title}</Text>
-                    <Text style={styles.cardDescription}>
-                        {/* Limita la longitud de la descripción y agrega "..." si es más larga */}
-                        {item.description.length > 100
-                            ? item.description.substring(0, 100) + "..."
-                            : item.description}
-                    </Text>
-                    {/* Otros datos resumidos */}
-                    <Text style={styles.cardInfo}>Otros datos...</Text>
+                    <Text style={styles.cardTitle}>{empleado.nombreCompleto}</Text>
+
+                    <View style={styles.cardRow}> 
+                        <View style={styles.cardColumn}>
+                            <Text style={styles.cardInfo}>Coontact: {empleado.numeroContacto}</Text>
+                            <Text style={styles.cardInfo}>Dirrecion: {empleado.direccion}</Text>
+                        </View>
+                        <View style={styles.cardColumn}>
+                            <Text style={styles.cardInfo}>fecha Nacimiento: {empleado.fechaNacimiento}</Text>
+                            <Text style={styles.cardInfo}>ID: {empleado.numeroIdentificacion}</Text>
+                        </View>
+                    </View>
+
+                    <Text style={styles.cardInfo}>Nivel: {empleado.nivel}</Text>
+                    <Text style={styles.cardInfo}>Cargo: {empleado.cargo}</Text>
                 </View>
             </TouchableOpacity>
+
 
             {/* Modal para mostrar los detalles completos de la tarjeta */}
             <Modal visible={isModalVisible} animationType="slide" onRequestClose={toggleModal}>
                 <View style={styles.modalContainer}>
                     <ScrollView contentContainerStyle={styles.modalContent}>
-                        {/* Título */}
-                        <Text style={styles.modalTitle}>{item.title}</Text>
 
-                        {/* Descripción completa */}
-                        <Text style={styles.modalDescription}>{item.description}</Text>
+                        <Text style={styles.modalTitle}>{empleado.nombreCompleto}</Text>
+                        <Text style={styles.modalData}>Número de Contacto: {empleado.numeroContacto}</Text>
+                        <Text style={styles.modalData}>Dirección: {empleado.direccion}</Text>
+                        <Text style={styles.modalData}>Fecha de Nacimiento: {empleado.fechaNacimiento}</Text>
+                        <Text style={styles.modalData}>Número de Identificación: {empleado.numeroIdentificacion}</Text>
+                        <Text style={styles.modalData}>Cargo: {empleado.cargo}</Text>
+                        <Text style={styles.modalData}>Nivel: {empleado.nivel}</Text>
 
-                        {/* Datos adicionales */}
-                        <Text style={styles.modalData}>Datos Específicos:</Text>
-                        <Text>{item.specificData}</Text>
-
-                        {/* Botón para cerrar el modal */}
+                       
                         <Button title="Cerrar" onPress={toggleModal} />
+
                     </ScrollView>
                 </View>
             </Modal>
+
         </View>
     );
 }
+
 
 const styles = StyleSheet.create({
     cardContainer: {
@@ -88,13 +91,18 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
     },
-    cardDescription: {
-        fontSize: 14,
-        color: "#666",
+    cardRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginBottom: 10,
+    },
+    cardColumn: {
+        flex: 1,
     },
     cardInfo: {
         fontSize: 12,
-        color: "#888",
+        color: "#666",
+        marginBottom: 5,
     },
     modalContainer: {
         flex: 1,
@@ -114,13 +122,8 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         marginBottom: 10,
     },
-    modalDescription: {
-        fontSize: 16,
-        marginBottom: 20,
-    },
     modalData: {
         fontSize: 16,
-        fontWeight: "bold",
         marginBottom: 10,
     },
 });
