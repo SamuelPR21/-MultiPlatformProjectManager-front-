@@ -1,4 +1,5 @@
 import {API_HOST} from "../utils/constants"
+import axios from "axios";
 
 
 export async function getEmpleadosApi() {
@@ -21,6 +22,17 @@ export async function getEmpleadoByIdApi(id) {
         return result;
     } catch (error) {
         console.log("Error al consumir la API de obtenr un empleado por ID: ", error);
+        return null;
+    }
+}
+
+export const addEmpleadoApi = async (empladoData) => {
+    try {
+        const url = `${API_HOST}/crear`;
+        const response = await axios.post(url, empladoData);
+        return response.data;
+    } catch (error) {
+        console.log("Error al consumir la API de agregar empleado: ", error);
         return null;
     }
 }

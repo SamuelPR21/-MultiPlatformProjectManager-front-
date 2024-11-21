@@ -23,7 +23,7 @@ export default function CardComponent(props) {
 
                     <View style={styles.cardRow}> 
                         <View style={styles.cardColumn}>
-                            <Text style={styles.cardInfo}>Coontact: {empleado.numeroContacto}</Text>
+                            <Text style={styles.cardInfo}>Contacto: {empleado.numeroContacto}</Text>
                             <Text style={styles.cardInfo}>Dirrecion: {empleado.direccion}</Text>
                         </View>
                         <View style={styles.cardColumn}>
@@ -35,6 +35,9 @@ export default function CardComponent(props) {
                     <Text style={styles.cardInfo}>Nivel: {empleado.nivel}</Text>
                     <Text style={styles.cardInfo}>Cargo: {empleado.cargo}</Text>
                 </View>
+                
+    
+
             </TouchableOpacity>
 
 

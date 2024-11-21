@@ -9,7 +9,6 @@ export default function List(props) {
     return(
         <FlatList
             data={empleados}
-            //numColumns={2}
             showsVerticalScrollIndicator={false}
             keyExtractor={(empleado) => String(empleado.id)}
             renderItem={({item}) =><EmpleadoCard empleado={item}/>} 

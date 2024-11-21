@@ -1,13 +1,16 @@
 import React, {useState, useEffect} from "react";
-import { Text, FlatList } from "react-native";
+import { View, Text, Modal, StyleSheet, Button } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { getEmpleadosApi, getEmpleadoByIdApi } from "../API/Employee";
+import { getEmpleadosApi, addEmpleadoApi } from "../API/Employee";
 import List from "../components/Employee/List"
 import Navbar from "../components/Navbar";
-import Tarjeta from "../components/Employee/Card"
+import CreateCard from "../components/Employee/CreateCard";
+
 
 export default function Profile() {
     const [empleados, setEmpleados] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+
     console.log('Empleados cargados--->', empleados);
 
     useEffect(() => {
@@ -28,42 +31,59 @@ export default function Profile() {
             
 
             setEmpleados(response);
-            //const empleadoArray =[];
-            //for await (const empleado of response.results) {
-             //   const empleadoDetails = await getEmpleadoByIdApi(empleado.id);
-
-                //if (!empleadoDetails) {
-               //     console.error(`No se encontró información para el empleado con ID ${empleado.id}`);
-             //   }
-
-                //empleadoArray.push(
-                  //  {
-                    //    id: empleado.id,
-                    //    nombreCompleto: empleado.nombre,
-                    //    numeroContacto: empleado.nuemroContacto,
-                    //    direccion: empleado.direccion,
-                    //    fechaNacimiento: empleado.fechaNacimiento,
-                    //    nivel: empleado.nivel,
-                    //    cargo: empleado.cargo,
-                    //    numeroIdentificacion: empleado.numeroIdentificacion
-
-                    //}
-                //);
             }catch(error) {
                 console.error("Error al cargar empelados: ",error);
+            }   
+    };
+
+    const addEmpleado = async(empladoData) =>{
+        try{
+            const result = await addEmpleadoApi(empladoData)
+            if(result){
+                setModalVisible(false);
+                await loadEmpleado();
+                console.log("Empleado agregado correctamente")
+                
             }
 
-            //setEmpleados((prevState) => [...prevState, ...empleadoArray]);
-
-        //}catch(error) {
-          //  console.error("Error al cargar empelados: ",error);
-        //}    
-    };
+        }catch(error){
+            console.error("Error al agregar empleado: ", error)
+        }
+    }
 
     return(
         <SafeAreaView>
             <Navbar/>
             <List empleados={empleados}/>
+            <Button title=" + " onPress={() => setModalVisible(true)}/>
+
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalView}>
+                    <CreateCard
+                        onSave = {addEmpleado}
+                        onCancel = {() => setModalVisible(false)}
+                    />
+                </View>
+            </Modal>    
         </SafeAreaView>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 10,
+    },
+    modalView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgba(0, 0, 0, 0.5)", 
+    },
+});
