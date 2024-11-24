@@ -36,3 +36,21 @@ export const addEmpleadoApi = async (empladoData) => {
         return null;
     }
 }
+
+export const deleteEmpleadoApi = async (id) => {
+    try {
+        const url = `${API_HOST}/elminar/${id}`;
+        const response = await axios.delete(url);
+        
+        if(response.status === 204){
+            return true;
+        }
+
+        console.log("Error al consumir la API de eliminar empleado: ", response.status);
+        return false;
+
+    } catch (error) {
+        console.log("Error al consumir la API de eliminar empleado: ", error);
+        return null;
+    }
+}

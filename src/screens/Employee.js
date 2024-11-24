@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
-import { View, Text, Modal, StyleSheet, Button } from "react-native";
+import { View, Text, Modal, StyleSheet, Button, TouchableOpacity} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { getEmpleadosApi, addEmpleadoApi } from "../API/Employee";
+import { getEmpleadosApi, addEmpleadoApi, deleteEmpleadoApi } from "../API/Employee";
 import List from "../components/Employee/List"
 import Navbar from "../components/Navbar";
 import CreateCard from "../components/Employee/CreateCard";
@@ -22,10 +22,11 @@ export default function Profile() {
     const loadEmpleado = async () => {
         try {
             const response = await getEmpleadosApi();
+            console.log("Respuesta de la API:", response);
 
 
             if(!response || !Array.isArray(response)) {
-                console.error("La api no devolvio resultados validos")
+                console.error("La api no devolvio resultados validos ", response)
                 return;
             }
             
@@ -47,16 +48,39 @@ export default function Profile() {
             }
 
         }catch(error){
-            console.error("Error al agregar empleado: ", error)
+            console.error("Error al agregar empleado: ", error.response?.data || error.message);
         }
+    }
+
+    const deleteEmpleado = async(id) => {
+        try {
+            const result = await deleteEmpleadoApi(id);
+            console.log("Resultado de la eliminación:", result);
+    
+            if (result) {
+                await loadEmpleado();
+                console.log("Empleado eliminado correctamente");
+            }else {
+                console.log("No se pudo eliminar el empleado.");
+            }
+        } catch (error) {
+            console.error("Error al eliminar empleado: ", error.response?.data || error.message);
+        }
+
     }
 
     return(
         <SafeAreaView>
-            <Navbar/>
-            <List empleados={empleados}/>
-            <Button title=" + " onPress={() => setModalVisible(true)}/>
+            <List empleados={empleados} deleteEmpleado={deleteEmpleado}/>
 
+            <TouchableOpacity
+                style={styles.floatingButton}
+                onPress={()=> setModalVisible(true)}
+
+            >
+                <Text style={styles.buttonText}>+</Text>
+
+            </TouchableOpacity>
 
             <Modal
                 animationType="slide"
@@ -78,12 +102,32 @@ export default function Profile() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 10,
+    },
+    floatingButton: {
+        position: "absolute",
+        bottom: 20, // Distancia desde la parte inferior
+        right: 20, // Distancia desde el lado derecho
+        backgroundColor: "#007BFF",
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        justifyContent: "center",
+        alignItems: "center",
+        elevation: 5, // Sombra en Android
+        shadowColor: "#000", // Sombra en iOS
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+    },
+    buttonText: {
+        color: "#fff",
+        fontSize: 24,
+        fontWeight: "bold",
     },
     modalView: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "rgba(0, 0, 0, 0.5)", 
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
     },
 });

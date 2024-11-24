@@ -95,7 +95,7 @@ export default function CreateCard({onSave, onCancel}) {
                 >
                     <Picker.Item label="SUPERVISOR" value="SUPERVISOR" />
                     <Picker.Item label="PATO" value="PATO" />
-                    <Picker.Item label="ESTÁNDAR" value="ESTÁNDAR" />
+                    <Picker.Item label="ESTANDAR" value="ESTANDAR" />
                 </Picker>
 
                 <View style={styles.buttonContainer}>

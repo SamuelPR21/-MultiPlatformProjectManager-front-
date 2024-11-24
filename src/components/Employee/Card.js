@@ -3,13 +3,22 @@ import { View, Text, Button, TouchableOpacity, Modal, StyleSheet, ScrollView } f
 
 export default function CardComponent(props) {
 
-    const {empleado} = props;
+    const{empleado, deleteEmpleado} = props;
+
+    //const {empleado} = props;
     // Estado para mostrar/ocultar el modal
     const [isModalVisible, setModalVisible] = useState(false);
 
     // Función para mostrar/ocultar el modal
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
+    };
+
+    const handleDelete = () => {
+        if(deleteEmpleado){
+            deleteEmpleado(empleado.id);
+            toggleModal();
+        }
     };
 
 
@@ -20,6 +29,8 @@ export default function CardComponent(props) {
             <TouchableOpacity onPress={toggleModal}>
                 <View style={styles.card}>
                     <Text style={styles.cardTitle}>{empleado.nombreCompleto}</Text>
+
+                   
 
                     <View style={styles.cardRow}> 
                         <View style={styles.cardColumn}>
@@ -55,7 +66,14 @@ export default function CardComponent(props) {
                         <Text style={styles.modalData}>Nivel: {empleado.nivel}</Text>
 
                        
-                        <Button title="Cerrar" onPress={toggleModal} />
+                        <Button title="Atras" onPress={toggleModal} />
+                        
+                        <Button 
+                            title = "Elminar" 
+                            onPress={handleDelete}
+                            color={"red"}
+                        
+                        />
 
                     </ScrollView>
                 </View>
