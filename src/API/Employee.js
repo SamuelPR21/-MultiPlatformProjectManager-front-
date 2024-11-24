@@ -58,7 +58,7 @@ export const deleteEmpleadoApi = async (id) => {
 export const updateEmpleadoApi = async (id, empleadoData) => {
     try{
         const url = `${API_HOST}/update/${id}`;
-        const response = await axios.put(url, empleadoData);
+        const response = await axios.patch(url, empleadoData);
         
 
         if(response.status === 200){
