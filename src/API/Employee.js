@@ -54,3 +54,22 @@ export const deleteEmpleadoApi = async (id) => {
         return null;
     }
 }
+
+export const updateEmpleadoApi = async (id, empleadoData) => {
+    try{
+        const url = `${API_HOST}/update/${id}`;
+        const response = await axios.put(url, empleadoData);
+        
+
+        if(response.status === 200){
+            return true;
+        }else{
+            console.log("Error al consumir la API de actualizar empleado: ", response.status);
+            return false;
+        }
+
+    }catch(error){
+        console.log("Error al consumir la API de actualizar empleado: ", error);
+        return null;
+    }
+}

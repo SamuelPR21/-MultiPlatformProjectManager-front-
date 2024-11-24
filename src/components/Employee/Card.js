@@ -1,17 +1,23 @@
 import React, { useState } from "react";
 import { View, Text, Button, TouchableOpacity, Modal, StyleSheet, ScrollView } from "react-native";
+import CardUpdate from "./CardUpdate";
 
 export default function CardComponent(props) {
 
-    const{empleado, deleteEmpleado} = props;
+    const{empleado, deleteEmpleado, updateEmpleado} = props;
 
     //const {empleado} = props;
     // Estado para mostrar/ocultar el modal
     const [isModalVisible, setModalVisible] = useState(false);
+    const [isEditModalVisible, setEditModalVisible] = useState(false);
 
     // Función para mostrar/ocultar el modal
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
+    };
+
+    const toggleEditModal = () => {
+        setEditModalVisible(!isEditModalVisible);
     };
 
     const handleDelete = () => {
@@ -46,7 +52,6 @@ export default function CardComponent(props) {
                     <Text style={styles.cardInfo}>Nivel: {empleado.nivel}</Text>
                     <Text style={styles.cardInfo}>Cargo: {empleado.cargo}</Text>
                 </View>
-                
     
 
             </TouchableOpacity>
@@ -74,8 +79,31 @@ export default function CardComponent(props) {
                             color={"red"}
                         
                         />
+                        <Button title="Editar" 
+                            onPress={toggleEditModal}
+                            color={"green"}
+                        />
 
                     </ScrollView>
+                </View>
+            </Modal>
+
+            {/* Modal para editar al empleado */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isEditModalVisible}
+                onRequestClose={toggleEditModal}
+            >
+                <View style={styles.modalContainer}>
+                    <CardUpdate
+                        empleado={empleado}
+                        onSave={(updatedEmpleado) => {
+                            updateEmpleado(empleado.id, updatedEmpleado);                        
+                            toggleEditModal();
+                        }}
+                        onCancel={toggleEditModal}
+                    />
                 </View>
             </Modal>
 

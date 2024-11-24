@@ -2,24 +2,13 @@ import React, { useState } from "react";
 import { SafeAreaView, TextInput, Button, StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { useNavigation } from "@react-navigation/native";
 
 
-export default function CreateCard({onSave, onCancel}) {
-    const [formData, setFormData] = useState({
-        nombreCompleto: "",
-        numeroContacto: "",
-        direccion: "",
-        fechaNacimiento: "",
-        numeroIdentificacion: "",
-        cargo: "",
-        nivel: "",
-    });
+export default function CardUpdate({empleado, onSave, onCancel}) {
+
+    const[formData, setFormData] = useState({...empleado});
 
     const [isDatePickerVisible, setDatePickerVisible] = useState(false);
-    const navigation = useNavigation();
-
-
 
     const showDatePicker = () => {
         setDatePickerVisible(true);
@@ -38,30 +27,37 @@ export default function CreateCard({onSave, onCancel}) {
         setFormData({ ...formData, [field]: value });
     };
 
+
+
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView>
             <View style={styles.card}>
                 <TextInput 
                     placeholder="Nombre Completo"
+                    value={formData.nombreCompleto}
                     onChangeText={(value) => handleChange("nombreCompleto", value)}
                     style={styles.input}
                 />
 
                 <TextInput
                     placeholder="Número Celular"
+                    value={formData.numeroContacto}
                     onChangeText={(value) => handleChange("numeroContacto", value)}
                     style={styles.input}
                 />
 
                 <TextInput 
                     placeholder="Dirección"
+                    value={formData.direccion}
                     onChangeText={(value) => handleChange("direccion", value)}
                     style={styles.input}
                 />
 
                 <TouchableOpacity onPress={showDatePicker} style={styles.dateInput}>
                     <Text style={styles.dateText}>
-                        {formData.fechaNacimiento ? formData.fechaNacimiento.toLocaleDateString("es-ES") : "Seleccionar fecha"}
+                        {formData.fechaNacimiento 
+                        ? new Date(formData.fechaNacimiento).toLocaleDateString("es-ES")
+                        : "Seleccionar fecha"}
                     </Text>
                 </TouchableOpacity>
 
@@ -69,18 +65,19 @@ export default function CreateCard({onSave, onCancel}) {
                     isVisible={isDatePickerVisible}
                     mode="date"
                     onConfirm={handleConfirm}
-                    onCancel={hideDatePicker}
-                    date={formData.fechaNacimiento || new Date()}
+                    onCancel={hideDatePicker}   
                 />
 
                 <TextInput 
                     placeholder="Número de Identificación"
+                    value={formData.numeroIdentificacion}
                     onChangeText={(value) => handleChange("numeroIdentificacion", value)}
                     style={styles.input}
                 />
 
                 <TextInput 
                     placeholder="Cargo"
+                    value={formData.cargo}
                     onChangeText={(value) => handleChange("cargo", value)}
                     style={styles.input}
                 />
@@ -100,9 +97,11 @@ export default function CreateCard({onSave, onCancel}) {
                     <Button title="Guardar" onPress={() => onSave(formData)} />
                     <Button title="Cancelar" onPress={onCancel} color="red" />
                 </View>
-            </View>
+            </View> 
         </SafeAreaView>
-    );
+    )
+
+
 }
 
 const styles = StyleSheet.create({

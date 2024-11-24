@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { View, Text, Modal, StyleSheet, Button, TouchableOpacity} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { getEmpleadosApi, addEmpleadoApi, deleteEmpleadoApi } from "../API/Employee";
+import { getEmpleadosApi, addEmpleadoApi, deleteEmpleadoApi, updateEmpleadoApi } from "../API/Employee";
 import List from "../components/Employee/List"
 import Navbar from "../components/Navbar";
 import CreateCard from "../components/Employee/CreateCard";
@@ -69,9 +69,25 @@ export default function Profile() {
 
     }
 
+    const updateEmpleado = async(id, empleadoData) => {
+        try {
+            const result = await updateEmpleadoApi(id, empleadoData);
+            console.log("Resultado de la actualización:", result);
+    
+            if (result) {
+                await loadEmpleado();
+                console.log("Empleado actualizado correctamente");
+            }else {
+                console.log("No se pudo actualizar el empleado.");
+            }
+        } catch (error) {
+            console.error("Error al actualizar empleado: ", error.response?.data || error.message);
+        }
+    }
+
     return(
         <SafeAreaView>
-            <List empleados={empleados} deleteEmpleado={deleteEmpleado}/>
+            <List empleados={empleados} deleteEmpleado={deleteEmpleado} updateEmpleado={updateEmpleado}/>
 
             <TouchableOpacity
                 style={styles.floatingButton}
