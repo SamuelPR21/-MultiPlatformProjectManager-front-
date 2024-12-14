@@ -1,17 +1,39 @@
-import React from "react";
+import React, {useState} from "react";
 import { TextInput, Button, Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {useFormik} from "formik"
 import * as Yup from "yup";
 
+import { loginApi } from "../../API/Authentication";
+
+
+
 export default function LoginForms() {
+
+    const[error, setError] = useState("");
 
     const formik = useFormik({
       initialValues: initialValues(),
       validationSchema: Yup.object(validationSchema()),
-      onSubmit: () =>{
-        console.log("Formulario enviado", formik.values);
-      }
+      validateOnChange: false,
+      onSubmit: async (formvalue) =>{
+        setError("");
+        const {username, password} = formvalue;
+        
+            try{
+                const token = await loginApi({username, password});
+
+                if(token){
+                    console.log("Login exitoso" , token)
+                }else{
+                    setError("Error al obtener el token")
+                }
+
+            }catch(apiError){
+                console.error("Error en la API de login:", apiError.message);
+                setError(apiError.message);
+            }
+        }
     })
 
     return (
@@ -22,7 +44,7 @@ export default function LoginForms() {
                 placeholder="Nombre de Usuario"
                 placeholderTextColor="#aaa"
                 style={styles.input}
-                keyboardType="email-address"
+                //keyboardType="email-address"
                 autoCapitalize="none"
                 value={formik.values.username}
                 onChangeText={(text) => formik.setFieldValue("username", text)}
@@ -44,6 +66,12 @@ export default function LoginForms() {
             <Text style={styles.footerText}>
                 No tienes una cuenta? <Text style={styles.link}>Registrate</Text>
             </Text>
+
+            <Text style= {styles.error}>{formik.errors.username}</Text>
+            <Text style= {styles.error}>{formik.errors.password}</Text>
+            <Text style= {styles.error}>{error}</Text>
+
+
         </SafeAreaView>
     );
 }
@@ -115,4 +143,11 @@ const styles = StyleSheet.create({
         color: "#007bff",
         fontWeight: "bold",
     },
+
+    error : {
+        textAlign: "center",
+        color:  "#ff0000",
+        marginTop: 20
+    }
+    
 });
