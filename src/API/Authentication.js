@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { API_AUTH } from "../utils/constants"; 
+import { jwtDecode } from "jwt-decode";
 
 // Función para guardar el token
 export const saveToken = async (token) => {
@@ -32,22 +33,27 @@ axios.interceptors.request.use(async (config) => {
 export const loginApi = async (credentials) => {
   try {
     const response = await axios.post(`${API_AUTH}/login`, credentials);
+    console.log("Respuesta de la API de login:", response);
 
     // Obtén el token del header "Authorization"
-    const token = response.headers.authorization;
+    const token = response.headers['authorization']; 
+    console.log("El token se ha obtenido del backend", token)
 
     if (token) {
-      // Guarda el token utilizando la función saveToken
+      // Decodifica el token para verificarlo
+      //const decodedToken = jwtDecode(token);
+      //console.log("Token decodificado:", decodedToken);
+
+      // Guarda el token para usarlo en futuras solicitudes
       await saveToken(token);
     } else {
       throw new Error("No se recibió el token de autenticación.");
     }
-
-    return token; // Devuelve el token obtenido
+  
+    return token; // Devuelve el token 
   } catch (error) {
-    console.error("Error en la API de login:", error.response?.data || error.message);
-    throw new Error(
-      error.response?.data?.message || "Error al autenticar. Por favor, verifica tus credenciales."
-    );
+    console.error("Error en la comunicacion de API de login:", error.response?.data || error.message);
+    throw error;
   }
+  
 };

@@ -1,40 +1,41 @@
-import React, {useState} from "react";
-import { TextInput, Button, Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import { TextInput, Text, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {useFormik} from "formik"
+import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import { loginApi } from "../../API/Authentication";
-
-
+import useAuth from "../../hooks/useAuth";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons"; 
 
 export default function LoginForms() {
-
-    const[error, setError] = useState("");
+    const [error, setError] = useState("");
+    const [showPassword, setShowPassword] = useState(false); 
+    const { login } = useAuth();
 
     const formik = useFormik({
-      initialValues: initialValues(),
-      validationSchema: Yup.object(validationSchema()),
-      validateOnChange: false,
-      onSubmit: async (formvalue) =>{
-        setError("");
-        const {username, password} = formvalue;
-        
-            try{
-                const token = await loginApi({username, password});
+        initialValues: initialValues(),
+        validationSchema: Yup.object(validationSchema()),
+        validateOnChange: false,
+        onSubmit: async (formValue) => {
+            setError("");
+            const { username, password } = formValue;
+
+            try {
+                const token = await loginApi({ username, password });
 
                 if(token){
-                    console.log("Login exitoso" , token)
+                    login(token);
+                    console.log("El token ha pasado al formuladio de Login" , token)
                 }else{
                     setError("Error al obtener el token")
                 }
-
-            }catch(apiError){
+            } catch (apiError) {
                 console.error("Error en la API de login:", apiError.message);
                 setError(apiError.message);
             }
-        }
-    })
+        },
+    });
 
     return (
         <SafeAreaView style={styles.container}>
@@ -44,22 +45,32 @@ export default function LoginForms() {
                 placeholder="Nombre de Usuario"
                 placeholderTextColor="#aaa"
                 style={styles.input}
-                //keyboardType="email-address"
                 autoCapitalize="none"
                 value={formik.values.username}
                 onChangeText={(text) => formik.setFieldValue("username", text)}
             />
-            <TextInput
-                placeholder="Contraseña"
-                placeholderTextColor="#aaa"
-                style={styles.input}
-                secureTextEntry={true}
-                value={formik.values.password}
-                onChangeText={(text) => formik.setFieldValue("password", text)}
+            <View style={styles.passwordContainer}>
+                <TextInput
+                    placeholder="Contraseña"
+                    placeholderTextColor="#aaa"
+                    style={styles.input}
+                    secureTextEntry={!showPassword} 
+                    value={formik.values.password}
+                    onChangeText={(text) => formik.setFieldValue("password", text)}
+                />
+                <TouchableOpacity
+                    style={styles.icon}
+                    onPress={() => setShowPassword(!showPassword)} 
+                >
+                    <Icon
+                        name={showPassword ? "eye-off" : "eye"} 
+                        size={24}
+                        color="#aaa"
+                    />
+                </TouchableOpacity>
+            </View>
 
-            />
-
-            <TouchableOpacity style={styles.loginButton} onPress={formik.handleSubmit}> 
+            <TouchableOpacity style={styles.loginButton} onPress={formik.handleSubmit}>
                 <Text style={styles.loginText}>Ingresar</Text>
             </TouchableOpacity>
 
@@ -67,11 +78,9 @@ export default function LoginForms() {
                 No tienes una cuenta? <Text style={styles.link}>Registrate</Text>
             </Text>
 
-            <Text style= {styles.error}>{formik.errors.username}</Text>
-            <Text style= {styles.error}>{formik.errors.password}</Text>
-            <Text style= {styles.error}>{error}</Text>
-
-
+            <Text style={styles.error}>{formik.errors.username}</Text>
+            <Text style={styles.error}>{formik.errors.password}</Text>
+            <Text style={styles.error}>{error}</Text>
         </SafeAreaView>
     );
 }
@@ -89,7 +98,6 @@ function validationSchema() {
         password: Yup.string().required("La contraseña es obligatoria"),
     };
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -120,6 +128,16 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 3 },
         elevation: 2,
     },
+    passwordContainer: {
+        width: "90%",
+        position: "relative", // Necesario para posicionar el ícono dentro del contenedor
+    },
+    icon: {
+        position: "absolute",
+        right: 16,
+        top: "50%",
+        transform: [{ translateY: -12 }], // Centrar verticalmente el ícono
+    },
     loginButton: {
         width: "90%",
         height: 50,
@@ -143,11 +161,9 @@ const styles = StyleSheet.create({
         color: "#007bff",
         fontWeight: "bold",
     },
-
-    error : {
+    error: {
         textAlign: "center",
-        color:  "#ff0000",
-        marginTop: 20
-    }
-    
+        color: "#ff0000",
+        marginTop: 20,
+    },
 });

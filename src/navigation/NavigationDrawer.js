@@ -1,5 +1,6 @@
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { Alert } from "react-native";
 import Perfil from "../screens/Profile";
 import Maquina from "../screens/Machine";
 import Cliente from "../screens/Customer";
@@ -8,13 +9,46 @@ import Empleado from "../screens/Employee"
 import Trabajo from "../screens/Job"
 import Pago from "../screens/Payment"
 import TipoTrabajo from "../screens/TypeJob"
+import LoginForms from "../screens/Regisiter/LoginForm";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import NavigationBanner from "./NavigationNavbarProfile"
-
+//import useAuth from "../hooks/useAuth"
+//import {navigationRef} from './NavigationApp'
 
 const Drawer = createDrawerNavigator();
 
 export default function NavigationDrawer() {
+
+    //const {logout} = useAuth();
+
+    //const handleLogout = () => {
+      //  Alert.alert(
+        //    "Cerrar Sesión",
+          //  "¿Estás seguro de que quieres cerrar sesión?",
+            //[
+              //  {text: "Cancelar", style: "cancel" },
+                //{
+                  //  text: "Salir",
+                    //onPress: async () => {
+                      //  await logout();
+                        //navigationRef.current?.navigate("Login");
+                    //},
+                      
+                //},
+            //],
+            //{ cancelable: true }
+        //)
+    //}
+
+    //const LogoutScreen = () => {
+      //  React.useEffect(() => {
+        //    handleLogout();
+        //}, []);
+
+        //return null;
+    //}
+
+
     return (
         <Drawer.Navigator>
             <Drawer.Screen 
@@ -84,7 +118,7 @@ export default function NavigationDrawer() {
                 
             />
             <Drawer.Screen 
-                name="Profile" 
+                name="Perfil" 
                 component={Perfil} 
                 options={{
                     drawerIcon: ({ color, size }) => (
@@ -92,6 +126,8 @@ export default function NavigationDrawer() {
                     ),
                 }}
             />
+
+
         </Drawer.Navigator>
     );
 }
