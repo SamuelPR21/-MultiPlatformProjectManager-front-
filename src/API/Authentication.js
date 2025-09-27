@@ -40,11 +40,7 @@ export const loginApi = async (credentials) => {
     console.log("El token se ha obtenido del backend", token)
 
     if (token) {
-      // Decodifica el token para verificarlo
-      //const decodedToken = jwtDecode(token);
-      //console.log("Token decodificado:", decodedToken);
-
-      // Guarda el token para usarlo en futuras solicitudes
+      
       await saveToken(token);
     } else {
       throw new Error("No se recibió el token de autenticación.");

@@ -13,47 +13,17 @@ import LoginForms from "../screens/Regisiter/LoginForm";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import NavigationBanner from "./NavigationNavbarProfile"
 //import useAuth from "../hooks/useAuth"
-//import {navigationRef} from './NavigationApp'
 
 const Drawer = createDrawerNavigator();
 
 export default function NavigationDrawer() {
-
-    //const {logout} = useAuth();
-
-    //const handleLogout = () => {
-      //  Alert.alert(
-        //    "Cerrar Sesión",
-          //  "¿Estás seguro de que quieres cerrar sesión?",
-            //[
-              //  {text: "Cancelar", style: "cancel" },
-                //{
-                  //  text: "Salir",
-                    //onPress: async () => {
-                      //  await logout();
-                        //navigationRef.current?.navigate("Login");
-                    //},
-                      
-                //},
-            //],
-            //{ cancelable: true }
-        //)
-    //}
-
-    //const LogoutScreen = () => {
-      //  React.useEffect(() => {
-        //    handleLogout();
-        //}, []);
-
-        //return null;
-    //}
 
 
     return (
         <Drawer.Navigator>
             <Drawer.Screen 
             name="Inicio" 
-            component={NavigationBanner}
+            component={Perfil}
             options={{
                 drawerIcon: ({ color, size }) => (
                     <Icon name="home" color={color} size={size} />
